@@ -19,7 +19,7 @@ public:
         .selectFields().fields({"phoneNumbers"})
         .reRoot()
         .variable(nullptr)
-        .selectFields().fields({"type", "number"})
+        .selectFields().fields({"type", "number", 12})
         .build();
 
       auto str = path.toString();

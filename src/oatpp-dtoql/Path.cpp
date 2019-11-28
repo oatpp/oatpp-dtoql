@@ -42,12 +42,40 @@ Path::ComponentType Path::Component::getType() {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // FieldCollection
 
-Path::FieldCollection::FieldCollection(const std::vector<oatpp::String>& fields)
+// FieldReference
+
+Path::FieldReference::FieldReference(const oatpp::String& name)
+  : m_name(name)
+  , m_index(-1)
+  , m_type(NAME)
+{}
+
+Path::FieldReference::FieldReference(v_int64 index)
+  : m_name(nullptr)
+  , m_index(index)
+  , m_type(INDEX)
+{}
+
+oatpp::String Path::FieldReference::getName() const {
+  return m_name;
+}
+
+v_int64 Path::FieldReference::getIndex() const {
+  return m_index;
+}
+
+Path::FieldReference::Type Path::FieldReference::getType() const {
+  return m_type;
+}
+
+// FieldCollection
+
+Path::FieldCollection::FieldCollection(const std::vector<FieldReference>& fields)
   : Component(ComponentType::FIELD_COLLECTION)
   , m_fields(fields)
 {}
 
-const std::vector<oatpp::String>& Path::FieldCollection::getFields() {
+const std::vector<Path::FieldReference>& Path::FieldCollection::getFields() {
   return m_fields;
 }
 
@@ -89,10 +117,18 @@ oatpp::String Path::toString() {
         const auto &fields = std::static_pointer_cast<FieldCollection>(component)->getFields();
         stream << "[";
         for(v_int32 i = 0; i < fields.size(); i ++) {
-          stream << "'" << fields[i] << "'";
+
+          const auto& field = fields[i];
+
+          switch(field.getType()) {
+            case FieldReference::Type::NAME: stream << "'" << field.getName() << "'"; break;
+            case FieldReference::Type::INDEX: stream << field.getIndex(); break;
+          }
+
           if(i < fields.size() - 1) {
             stream << ", ";
           }
+
         }
         stream << "]";
         break;
@@ -129,8 +165,8 @@ Path::Builder& Path::Builder::reRoot() {
   return *this;
 }
 
-Path::Builder& Path::Builder::fields(const std::vector<oatpp::String>& fieldNames) {
-  m_components.push_back(std::make_shared<FieldCollection>(fieldNames));
+Path::Builder& Path::Builder::fields(const std::vector<FieldReference>& fieldReferences) {
+  m_components.push_back(std::make_shared<FieldCollection>(fieldReferences));
   return *this;
 }
 

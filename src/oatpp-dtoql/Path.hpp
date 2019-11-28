@@ -64,13 +64,35 @@ private:
     FieldSelector() : Component(ComponentType::FIELD_SELECTOR) {}
   };
 
-  class FieldCollection : public Component {
+  class FieldReference {
+  public:
+    enum Type : v_int32 {
+      NAME = 0,
+      INDEX = 1
+    };
   private:
-    std::vector<oatpp::String> m_fields;
+    oatpp::String m_name;
+    v_int64 m_index;
+    Type m_type;
   public:
 
-    FieldCollection(const std::vector<oatpp::String>& fields);
-    const std::vector<oatpp::String>& getFields();
+    FieldReference(const oatpp::String& name);
+    FieldReference(const char* name) : FieldReference(oatpp::String(name)) {};
+    FieldReference(v_int64 index);
+
+    oatpp::String getName() const;
+    v_int64 getIndex() const;
+    Type getType() const;
+
+  };
+
+  class FieldCollection : public Component {
+  private:
+    std::vector<FieldReference> m_fields;
+  public:
+
+    FieldCollection(const std::vector<FieldReference>& fields);
+    const std::vector<FieldReference>& getFields();
 
   };
 
@@ -105,7 +127,7 @@ public:
 
     Builder& reRoot();
 
-    Builder& fields(const std::vector<oatpp::String>& fieldNames);
+    Builder& fields(const std::vector<FieldReference>& fieldReferences);
 
     Builder& variable(const oatpp::String& name);
 
