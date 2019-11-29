@@ -32,7 +32,7 @@
 namespace oatpp { namespace dtoql {
 
 class Path {
-private:
+public:
 
   enum ComponentType : v_int32 {
     RE_ROOT = 0,
