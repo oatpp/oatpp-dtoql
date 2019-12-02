@@ -94,11 +94,11 @@ oatpp::String Path::Variable::getName() {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Path
 
-Path::Path(const std::list<std::shared_ptr<Component>>& components)
+Path::Path(const std::vector<std::shared_ptr<Component>>& components)
   : m_components(components)
 {}
 
-const std::list<std::shared_ptr<Path::Component>>& Path::getComponents() {
+const std::vector<std::shared_ptr<Path::Component>>& Path::getComponents() {
   return m_components;
 }
 

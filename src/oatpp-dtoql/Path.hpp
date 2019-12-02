@@ -26,7 +26,6 @@
 #define oatpp_dtoql_Path_hpp
 
 #include "oatpp/core/Types.hpp"
-#include <list>
 #include <vector>
 
 namespace oatpp { namespace dtoql {
@@ -107,12 +106,12 @@ public:
   };
 
 private:
-  std::list<std::shared_ptr<Component>> m_components;
+  std::vector<std::shared_ptr<Component>> m_components;
 public:
 
-  Path(const std::list<std::shared_ptr<Component>>& components);
+  Path(const std::vector<std::shared_ptr<Component>>& components);
 
-  const std::list<std::shared_ptr<Component>>& getComponents();
+  const std::vector<std::shared_ptr<Component>>& getComponents();
 
   oatpp::String toString();
 
@@ -120,7 +119,7 @@ public:
 
   class Builder {
   private:
-    std::list<std::shared_ptr<Component>> m_components;
+    std::vector<std::shared_ptr<Component>> m_components;
   public:
 
     Builder& selectFields();

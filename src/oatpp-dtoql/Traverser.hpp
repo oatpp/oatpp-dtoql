@@ -55,13 +55,20 @@ public:
 
 public:
 
-  class Field {
+  template<class T>
+  using LinkedList = oatpp::collection::LinkedList<T>;
+
+public:
+
+  class Field : public oatpp::base::Countable {
   private:
     oatpp::String m_name;
     v_int64 m_index;
     AbstractObjectWrapper m_value;
+    bool m_isValid;
   public:
 
+    Field();
     Field(const oatpp::String& name, v_int64 index, const AbstractObjectWrapper& value);
 
     oatpp::String getName() const;
@@ -71,11 +78,23 @@ public:
   };
 
 private:
-  std::shared_ptr<Path> m_path;
-  AbstractObjectWrapper m_object;
-private:
 
-  AbstractObjectWrapper m_currObject;
+  class StackNode {
+  private:
+    std::list<Field> m_set;
+    Field m_currField;
+  public:
+
+    StackNode(std::list<Field>&& set);
+
+    std::list<Field> popNextSelection(const std::shared_ptr<Path::FieldCollection>& fields);
+
+    const Field& popNext();
+
+    const Field& getCurrentField();
+
+    bool isEmpty();
+  };
 
 private:
 
@@ -85,12 +104,28 @@ private:
 public:
   static std::list<Field> selectFields(const AbstractObjectWrapper& polymorph, const std::shared_ptr<Path::FieldCollection>& fields);
 
+private:
+  void pushResult();
+private:
+  std::shared_ptr<Path> m_path;
+private:
+
+  v_int32 m_pathComponentIndex;
+  std::list<std::shared_ptr<StackNode>> m_stack;
+
+private:
+
+  std::vector<std::vector<Field>> m_resultTable;
+
 public:
 
   Traverser(const std::shared_ptr<Path>& path, const AbstractObjectWrapper& polymorph);
 
-
   bool iterate();
+
+  const std::vector<std::vector<Field>>& getResultTable();
+
+  void printResultTable();
 
 };
 

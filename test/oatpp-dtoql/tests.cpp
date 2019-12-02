@@ -108,26 +108,47 @@ public:
     }
 
     {
+//      auto dto = createTestDto();
+//
+//      auto collection = std::shared_ptr<oatpp::dtoql::Path::FieldCollection>(nullptr);//new oatpp::dtoql::Path::FieldCollection({"Key.0", 1, 2}));
+//
+//      auto selection = oatpp::dtoql::Traverser::selectFields(dto->child2->list, collection);
+//
+//      auto objectMapper = oatpp::parser::json::mapping::ObjectMapper::createShared();
+//
+//      for(auto& field : selection) {
+//
+//        auto json = objectMapper->writeToString(field.getValue());
+//
+//        if(field.getName()) {
+//          OATPP_LOGD("Field", "index=%d, name='%s', value='%s'", field.getIndex(), field.getName()->getData(), json->getData());
+//        } else {
+//          OATPP_LOGD("Field", "index=%d, name='%s', value='%s'", field.getIndex(), "<null>", json->getData());
+//        }
+//
+//      }
+
+    }
+
+    {
+
+      auto path = oatpp::dtoql::Path::Builder()
+        .variable(nullptr)
+        .fields({"list", "map"})
+        .fields({v_int64(0), "Key-Obj-2.5", 9})
+        .fields({"int_value"})
+        .buildShared();
+
+      auto str = path->toString();
+      OATPP_LOGD("path", "\"%s\"", str->getData());
+
       auto dto = createTestDto();
 
-      auto collection = std::shared_ptr<oatpp::dtoql::Path::FieldCollection>(new oatpp::dtoql::Path::FieldCollection({"Key.0", 1, 2}));
+      oatpp::dtoql::Traverser traverser(path, dto);
 
-      auto selection = oatpp::dtoql::Traverser::selectFields(dto->child1->map, collection);
-
-      auto objectMapper = oatpp::parser::json::mapping::ObjectMapper::createShared();
-
-      for(auto& field : selection) {
-
-        auto json = objectMapper->writeToString(field.getValue());
-
-        if(field.getName()) {
-          OATPP_LOGD("Field", "index=%d, name='%s', value='%s'", field.getIndex(), field.getName()->getData(), json->getData());
-        } else {
-          OATPP_LOGD("Field", "index=%d, name='%s', value='%s'", field.getIndex(), "<null>", json->getData());
-        }
-
+      while(traverser.iterate()){
+        traverser.printResultTable();
       }
-
 
     }
 
