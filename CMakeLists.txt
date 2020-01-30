@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.1 FATAL_ERROR)
 ## use these variables to configure module installation
 
 set(OATPP_THIS_MODULE_NAME oatpp-dtoql) ## name of the module (also name of folders in installation dirs)
-set(OATPP_THIS_MODULE_VERSION "0.19.10") ## version of the module (also sufix of folders in installation dirs)
+set(OATPP_THIS_MODULE_VERSION "1.0.0") ## version of the module (also sufix of folders in installation dirs)
 set(OATPP_THIS_MODULE_LIBRARIES oatpp-dtoql) ## list of libraries to find when find_package is called
 set(OATPP_THIS_MODULE_TARGETS oatpp-dtoql) ## list of targets to install
 set(OATPP_THIS_MODULE_DIRECTORIES oatpp-dtoql) ## list of directories to install

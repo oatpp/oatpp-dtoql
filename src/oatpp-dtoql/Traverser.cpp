@@ -237,15 +237,15 @@ std::list<Traverser::Field> Traverser::selectFieldsInObject(const PolymorphicWra
 
 std::list<Traverser::Field> Traverser::selectFields(const AbstractObjectWrapper& polymorph, const std::shared_ptr<Path::FieldCollection>& fields) {
 
-  auto type = polymorph.valueType;
+  auto classId = polymorph.valueType->classId.id;
 
-  if(type->name == oatpp::data::mapping::type::__class::AbstractList::CLASS_NAME) {
+  if(classId == oatpp::data::mapping::type::__class::AbstractList::CLASS_ID.id) {
     // List
     return selectFieldsInList(oatpp::data::mapping::type::static_wrapper_cast<AbstractList>(polymorph), fields);
-  } else if(type->name == oatpp::data::mapping::type::__class::AbstractListMap::CLASS_NAME) {
+  } else if(classId == oatpp::data::mapping::type::__class::AbstractListMap::CLASS_ID.id) {
     // Map
     return selectFieldsInMap(oatpp::data::mapping::type::static_wrapper_cast<AbstractFieldsMap>(polymorph), fields);
-  } else if(type->name == oatpp::data::mapping::type::__class::AbstractObject::CLASS_NAME) {
+  } else if(classId == oatpp::data::mapping::type::__class::AbstractObject::CLASS_ID.id) {
     // Object
     return selectFieldsInObject(oatpp::data::mapping::type::static_wrapper_cast<Object>(polymorph), fields);
   }
